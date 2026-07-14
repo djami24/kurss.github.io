@@ -32,28 +32,28 @@
     --hover-bg: #232323;
   }
   body.light-mode{
-    /* Kunduzgi rejim — och fon, qora yozuv */
-    --bg: #f3efe3;
+    /* Kunduzgi rejim — sof oq fon, qora yozuv */
+    --bg: #ffffff;
     --bg-grad-1: #ffffff;
-    --bg-grad-2: #f3efe3;
-    --bg-grad-3: #eae4d2;
+    --bg-grad-2: #ffffff;
+    --bg-grad-3: #ffffff;
     --panel: #ffffff;
-    --panel-2: #f7f4ea;
-    --line: #ddd6c0;
+    --panel-2: #f7f7f7;
+    --line: #e0e0e0;
     --gold: #a97e2b;
     --gold-dim: #8a7139;
     --text: #1a1a1a;
-    --text-dim: #6b6357;
+    --text-dim: #6b6b6b;
     --digit-bg: #ffffff;
-    --digit-line: #d8d0ba;
-    --digit-dim-text: #b2a98f;
-    --digit-dim-bg: #f2eee0;
+    --digit-line: #dcdcdc;
+    --digit-dim-text: #b0b0b0;
+    --digit-dim-bg: #f5f5f5;
     --mint: #2f7a5a;
     --red: #b8503b;
     --green: #2f8a52;
-    --sep-color: #b8ae92;
-    --input-bg: #faf7ee;
-    --hover-bg: #ece5d0;
+    --sep-color: #bdbdbd;
+    --input-bg: #fafafa;
+    --hover-bg: #ececec;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
@@ -88,6 +88,33 @@
     color: var(--text-dim);
     font-size: 14px;
     margin-bottom: 34px;
+  }
+
+  /* ---- currency tabs ---- */
+  .curr-tabs{
+    display:flex;
+    justify-content:center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .curr-tab{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: var(--text-dim);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 20px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+  .curr-tab:hover{ background: var(--hover-bg); }
+  .curr-tab.active{
+    color: var(--gold);
+    border-color: var(--gold-dim);
+    background: var(--panel-2);
   }
 
   /* ---- split-flap board ---- */
@@ -214,6 +241,22 @@
     width: 62px;
     flex-shrink:0;
   }
+  .row select{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight:600;
+    color: var(--mint);
+    background: transparent;
+    border: none;
+    outline: none;
+    width: 68px;
+    flex-shrink:0;
+    cursor: pointer;
+  }
+  .row select option{
+    background: var(--panel);
+    color: var(--text);
+  }
   .row input{
     background: transparent;
     border: none;
@@ -319,12 +362,17 @@
     </button>
   </div>
   <div class="eyebrow">O'zbekiston Respublikasi Markaziy banki</div>
-  <h1>AQSH dollari kursi</h1>
+  <h1 id="mainTitle">AQSH dollari kursi</h1>
   <div class="subtitle">Rasmiy kurs — real vaqt rejimida CBU.uz orqali</div>
+
+  <div class="curr-tabs">
+    <button class="curr-tab active" data-cur="USD" type="button">USD</button>
+    <button class="curr-tab" data-cur="RUB" type="button">RUB</button>
+  </div>
 
   <div class="board">
     <div class="board-top">
-      <span class="code">USD / UZS</span>
+      <span class="code" id="boardCode">USD / UZS</span>
       <span id="rateDate">— .— .—</span>
     </div>
     <div class="flap-row" id="flapRow">
@@ -336,7 +384,7 @@
       <span class="flap-unit">so'm</span>
     </div>
     <div class="board-bottom">
-      <span>1 AQSH dollari uchun</span>
+      <span id="boardUnitLabel">1 AQSH dollari uchun</span>
       <span class="diff flat" id="diffLabel">o'zgarish yo'q</span>
     </div>
   </div>
@@ -346,7 +394,10 @@
   <div class="calc">
     <h2>Kalkulyator</h2>
     <div class="row">
-      <label>USD</label>
+      <select id="calcCurSelect">
+        <option value="USD">USD</option>
+        <option value="RUB">RUB</option>
+      </select>
       <input type="text" inputmode="decimal" id="usdInput" placeholder="0" value="1">
     </div>
     <div class="swap-btn"><button id="swapBtn" title="Aylantirish">⇅</button></div>
@@ -359,20 +410,28 @@
       <button id="manualToggle">Kursni qo'lda kiritish</button>
     </div>
     <div class="row manual-row" id="manualRow">
-      <label>Kurs</label>
+      <label id="manualRateLabel">Kurs</label>
       <input type="text" inputmode="decimal" id="manualRate" placeholder="masalan: 12750">
     </div>
   </div>
 
   <footer>
     Manba: <a href="https://cbu.uz" target="_blank" rel="noopener">cbu.uz</a> — O'zbekiston Respublikasi Markaziy banki rasmiy sayti.<br>
-    Ushbu kurs faqat statistik/hisob-kitob maqsadlarida beriladi, bank sotib olish yoki sotish majburiyatini bildirmaydi.
+    Ushbu kurslar (USD, RUB) faqat statistik/hisob-kitob maqsadlarida beriladi, bank sotib olish yoki sotish majburiyatini bildirmaydi.
   </footer>
 </div>
 
 <script>
-let currentRate = null;
+const CUR_INFO = {
+  USD: { title: 'AQSH dollari kursi', unitLabel: "1 AQSH dollari uchun", code: 'USD / UZS' },
+  RUB: { title: 'Rossiya rubli kursi', unitLabel: '1 Rossiya rubli uchun', code: 'RUB / UZS' }
+};
+
+let rates = { USD: null, RUB: null };   // {rate, diff, date} yoki null
+let dataLoaded = { USD: false, RUB: false };
 let manualMode = false;
+let boardCur = 'USD';   // yuqoridagi taxtada ko'rsatilayotgan valyuta
+let calcCur = 'USD';    // kalkulyatorda tanlangan valyuta
 
 const themeToggle = document.getElementById('themeToggle');
 const themeIcon = document.getElementById('themeIcon');
@@ -399,9 +458,15 @@ const statusLine = document.getElementById('statusLine');
 const usdInput = document.getElementById('usdInput');
 const uzsInput = document.getElementById('uzsInput');
 const manualRate = document.getElementById('manualRate');
+const manualRateLabel = document.getElementById('manualRateLabel');
 const manualToggle = document.getElementById('manualToggle');
 const manualRow = document.getElementById('manualRow');
 const swapBtn = document.getElementById('swapBtn');
+const mainTitle = document.getElementById('mainTitle');
+const boardCode = document.getElementById('boardCode');
+const boardUnitLabel = document.getElementById('boardUnitLabel');
+const currTabs = document.querySelectorAll('.curr-tab');
+const calcCurSelect = document.getElementById('calcCurSelect');
 
 let lastEdited = 'usd';
 
@@ -420,6 +485,40 @@ function renderFlap(rateValue){
   unit.className = 'flap-unit';
   unit.textContent = "so'm";
   flapRow.appendChild(unit);
+}
+
+function renderDimFlap(){
+  flapRow.innerHTML = '';
+  for(let i=0;i<5;i++){
+    const span = document.createElement('span');
+    span.className = 'flap-digit dim';
+    span.textContent = '—';
+    flapRow.appendChild(span);
+  }
+  const unit = document.createElement('span');
+  unit.className = 'flap-unit';
+  unit.textContent = "so'm";
+  flapRow.appendChild(unit);
+}
+
+function updateBoard(){
+  // Taxtaning sarlavha/label qismini joriy valyutaga moslash
+  const info = CUR_INFO[boardCur];
+  mainTitle.textContent = info.title;
+  boardCode.textContent = info.code;
+  boardUnitLabel.textContent = info.unitLabel;
+
+  const entry = rates[boardCur];
+  if(entry){
+    renderFlap(entry.rate);
+    rateDate.textContent = formatDateUZ(entry.date);
+    setDiff(entry.diff);
+  } else if(dataLoaded[boardCur] === false){
+    renderDimFlap();
+    rateDate.textContent = '— .— .—';
+    diffLabel.textContent = "o'zgarish yo'q";
+    diffLabel.className = 'diff flat';
+  }
 }
 
 function formatDateUZ(dateStr){
@@ -446,7 +545,7 @@ function setDiff(diffValue){
 }
 
 function recalc(){
-  const rate = manualMode ? parseFloat(manualRate.value) : currentRate;
+  const rate = manualMode ? parseFloat(manualRate.value) : (rates[calcCur] ? rates[calcCur].rate : null);
   if(!rate || isNaN(rate)) return;
   if(lastEdited === 'usd'){
     const usd = parseFloat(usdInput.value.replace(/[, ]/g,''));
@@ -481,16 +580,43 @@ manualToggle.addEventListener('click', () => {
   manualMode = !manualMode;
   manualRow.classList.toggle('show', manualMode);
   manualToggle.textContent = manualMode ? "Rasmiy kursga qaytish" : "Kursni qo'lda kiritish";
-  if(manualMode && currentRate){
-    manualRate.value = currentRate;
+  manualRateLabel.textContent = 'Kurs (' + calcCur + ')';
+  const entry = rates[calcCur];
+  if(manualMode && entry){
+    manualRate.value = entry.rate;
   }
   recalc();
 });
 
-const CBU_URL = 'https://cbu.uz/uz/arkhiv-kursov-valyut/json/USD/';
+// Yuqoridagi taxtada USD / RUB o'rtasida almashtirish
+currTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    currTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    boardCur = tab.dataset.cur;
+    updateBoard();
+  });
+});
+
+// Kalkulyatorda valyuta tanlash (USD yoki RUB)
+calcCurSelect.addEventListener('change', () => {
+  calcCur = calcCurSelect.value;
+  manualRateLabel.textContent = 'Kurs (' + calcCur + ')';
+  const entry = rates[calcCur];
+  if(manualMode && entry){
+    manualRate.value = entry.rate;
+  }
+  recalc();
+});
+
+function cbuUrl(code){
+  return 'https://cbu.uz/uz/arkhiv-kursov-valyut/json/' + code + '/';
+}
 // To'g'ridan-to'g'ri so'rov brauzerda CORS tomonidan bloklansa,
 // zaxira sifatida ochiq proksi orqali qayta urinib ko'ramiz.
-const CBU_URL_PROXY = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(CBU_URL);
+function cbuUrlProxy(code){
+  return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(cbuUrl(code));
+}
 
 async function fetchJson(url){
   const res = await fetch(url, { cache: 'no-store' });
@@ -498,47 +624,59 @@ async function fetchJson(url){
   return res.json();
 }
 
+async function fetchOneRate(code){
+  let data;
+  try{
+    data = await fetchJson(cbuUrl(code));
+  }catch(err1){
+    data = await fetchJson(cbuUrlProxy(code));
+  }
+  const item = Array.isArray(data) ? data[0] : data;
+  const rate = parseFloat(item.Rate ?? item.rate);
+  const diff = item.Diff ?? item.diff;
+  const date = item.Date ?? item.date;
+  if(!rate || isNaN(rate)) throw new Error('parse');
+  return { rate, diff, date };
+}
+
 async function fetchRate(){
   // Agar avval muvaffaqiyatli kurs ko'rsatilgan bo'lsa, xabarni
   // "yangilanmoqda" deb ko'rsatamiz, lekin joriy raqamni o'chirmaymiz —
   // shunda kurs ekranda o'zgarib/yo'qolib ketmaydi.
-  if(!currentRate){
+  if(!rates.USD && !rates.RUB){
     statusLine.textContent = 'Kurs yuklanmoqda…';
   }
 
-  let data;
-  try{
-    data = await fetchJson(CBU_URL);
-  }catch(err1){
-    try{
-      data = await fetchJson(CBU_URL_PROXY);
-    }catch(err2){
-      handleFetchFailure();
-      return;
-    }
+  const [usdResult, rubResult] = await Promise.allSettled([
+    fetchOneRate('USD'),
+    fetchOneRate('RUB')
+  ]);
+
+  if(usdResult.status === 'fulfilled'){
+    rates.USD = usdResult.value;
+    dataLoaded.USD = true;
+  }
+  if(rubResult.status === 'fulfilled'){
+    rates.RUB = rubResult.value;
+    dataLoaded.RUB = true;
   }
 
-  try{
-    const item = Array.isArray(data) ? data[0] : data;
-    const rate = parseFloat(item.Rate ?? item.rate);
-    const diff = item.Diff ?? item.diff;
-    const date = item.Date ?? item.date;
-    if(!rate || isNaN(rate)) throw new Error('parse');
-
-    currentRate = rate;
-    renderFlap(rate);
-    rateDate.textContent = formatDateUZ(date);
-    setDiff(diff);
-    statusLine.innerHTML = 'Yangilandi: rasmiy manba — <a href="https://cbu.uz" target="_blank" rel="noopener">cbu.uz</a>';
+  if(rates.USD || rates.RUB){
+    updateBoard();
     if(!manualMode) recalc();
-  }catch(err){
+    if(rates.USD && rates.RUB){
+      statusLine.innerHTML = 'Yangilandi: rasmiy manba — <a href="https://cbu.uz" target="_blank" rel="noopener">cbu.uz</a>';
+    } else {
+      statusLine.innerHTML = "Ba'zi kurslar yangilanmadi, oxirgi bilingan qiymatlar ko'rsatilmoqda. Manba: <a href=\"https://cbu.uz\" target=\"_blank\" rel=\"noopener\">cbu.uz</a>";
+    }
+  } else {
     handleFetchFailure();
   }
 }
 
 function handleFetchFailure(){
-  if(currentRate){
-    // Kurs allaqachon ko'rsatilgan — uni o'chirmaymiz, faqat ogohlantiramiz.
+  if(rates.USD || rates.RUB){
+    // Kamida bitta kurs allaqachon ko'rsatilgan — uni o'chirmaymiz, faqat ogohlantiramiz.
     statusLine.innerHTML = "Yangilanmadi, oxirgi bilingan kurs ko'rsatilmoqda. Manba: <a href=\"https://cbu.uz\" target=\"_blank\" rel=\"noopener\">cbu.uz</a>";
     return;
   }
@@ -546,11 +684,15 @@ function handleFetchFailure(){
   manualMode = true;
   manualRow.classList.add('show');
   manualToggle.textContent = "Rasmiy kursga qaytish";
-  flapRow.querySelectorAll('.flap-digit').forEach(d => d.classList.add('dim'));
+  manualRateLabel.textContent = 'Kurs (' + calcCur + ')';
+  renderDimFlap();
 }
 
 usdInput.value = '1';
+updateBoard();
 fetchRate();
+// Kurslarni har 60 soniyada avtomatik yangilab turish
+setInterval(fetchRate, 60000);
 </script>
 </body>
 </html>
