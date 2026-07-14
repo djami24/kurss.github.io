@@ -1,4 +1,3 @@
-# kurss.github.io
 <!DOCTYPE html>
 <html lang="uz">
 <head>
