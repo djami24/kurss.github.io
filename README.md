@@ -1,4 +1,4 @@
-
+<!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
@@ -8,25 +8,62 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0d211c;
-    --panel: #133429;
-    --panel-2: #163d2f;
-    --line: #244a3c;
-    --gold: #cda349;
+    /* Tungi rejim (default) — qora fon, oq yozuv */
+    --bg: #000000;
+    --bg-grad-1: #0a0a0a;
+    --bg-grad-2: #000000;
+    --bg-grad-3: #000000;
+    --panel: #111111;
+    --panel-2: #161616;
+    --line: #2c2c2c;
+    --gold: #d9b158;
     --gold-dim: #8a7139;
-    --cream: #f1ece0;
-    --mint: #6fb79a;
-    --red: #d9705a;
-    --green: #6fbf8a;
+    --text: #ffffff;
+    --text-dim: #9a9a9a;
+    --digit-bg: #0a0a0a;
+    --digit-line: #333333;
+    --digit-dim-text: #5a5a5a;
+    --digit-dim-bg: #080808;
+    --mint: #7fc9a8;
+    --red: #e07f6a;
+    --green: #7fd39a;
+    --sep-color: #4a4a4a;
+    --input-bg: #0c0c0c;
+    --hover-bg: #232323;
+  }
+  body.light-mode{
+    /* Kunduzgi rejim — och fon, qora yozuv */
+    --bg: #f3efe3;
+    --bg-grad-1: #ffffff;
+    --bg-grad-2: #f3efe3;
+    --bg-grad-3: #eae4d2;
+    --panel: #ffffff;
+    --panel-2: #f7f4ea;
+    --line: #ddd6c0;
+    --gold: #a97e2b;
+    --gold-dim: #8a7139;
+    --text: #1a1a1a;
+    --text-dim: #6b6357;
+    --digit-bg: #ffffff;
+    --digit-line: #d8d0ba;
+    --digit-dim-text: #b2a98f;
+    --digit-dim-bg: #f2eee0;
+    --mint: #2f7a5a;
+    --red: #b8503b;
+    --green: #2f8a52;
+    --sep-color: #b8ae92;
+    --input-bg: #faf7ee;
+    --hover-bg: #ece5d0;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
-    background: radial-gradient(ellipse at top, #123528 0%, var(--bg) 55%, #081712 100%);
-    color: var(--cream);
+    background: radial-gradient(ellipse at top, var(--bg-grad-1) 0%, var(--bg-grad-2) 55%, var(--bg-grad-3) 100%);
+    color: var(--text);
     font-family: 'Manrope', sans-serif;
     min-height:100vh;
     padding: 40px 20px 60px;
+    transition: background 0.3s ease, color 0.3s ease;
   }
   .wrap{ max-width: 760px; margin: 0 auto; }
 
@@ -48,7 +85,7 @@
   }
   .subtitle{
     text-align:center;
-    color: #a9c3b6;
+    color: var(--text-dim);
     font-size: 14px;
     margin-bottom: 34px;
   }
@@ -73,7 +110,7 @@
     display:flex; justify-content: space-between; align-items:center;
     font-family:'IBM Plex Mono', monospace;
     font-size: 12px;
-    color: #85a696;
+    color: var(--text-dim);
     margin-bottom: 18px;
     position: relative;
     z-index:1;
@@ -91,27 +128,27 @@
     font-family:'IBM Plex Mono', monospace;
     font-weight:700;
     font-size: clamp(38px, 9vw, 64px);
-    background: #0b1f18;
-    border: 1px solid #2b5645;
+    background: var(--digit-bg);
+    border: 1px solid var(--digit-line);
     border-radius: 8px;
     padding: 6px 4px;
     min-width: 0.85em;
     text-align:center;
-    color: var(--cream);
+    color: var(--text);
     box-shadow: inset 0 -2px 6px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.04);
   }
-  .flap-digit.dim{ color:#5a7c6d; background:#0a1c16; }
+  .flap-digit.dim{ color:var(--digit-dim-text); background:var(--digit-dim-bg); }
   .flap-sep{
     font-family:'IBM Plex Mono', monospace;
     font-weight:700;
     font-size: clamp(38px, 9vw, 64px);
-    color: #4a7062;
+    color: var(--sep-color);
     padding: 6px 0;
   }
   .flap-unit{
     font-family:'IBM Plex Mono', monospace;
     font-size: 15px;
-    color: #85a696;
+    color: var(--text-dim);
     align-self:center;
     margin-left: 8px;
   }
@@ -127,17 +164,17 @@
     position:relative; z-index:1;
     font-family:'IBM Plex Mono', monospace;
     font-size: 12.5px;
-    color: #85a696;
+    color: var(--text-dim);
   }
   .diff{ font-weight:600; }
   .diff.up{ color: var(--green); }
   .diff.down{ color: var(--red); }
-  .diff.flat{ color: #85a696; }
+  .diff.flat{ color: var(--text-dim); }
 
   .status-line{
     text-align:center;
     font-size: 12px;
-    color: #7a9686;
+    color: var(--text-dim);
     margin-top: 14px;
     min-height: 16px;
   }
@@ -164,7 +201,7 @@
     display:flex;
     align-items:center;
     gap: 12px;
-    background: #0d251d;
+    background: var(--input-bg);
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 12px 16px;
@@ -181,14 +218,14 @@
     background: transparent;
     border: none;
     outline: none;
-    color: var(--cream);
+    color: var(--text);
     font-family:'IBM Plex Mono', monospace;
     font-size: 19px;
     font-weight: 600;
     width: 100%;
     text-align: right;
   }
-  .row input::placeholder{ color:#4a6a5c; }
+  .row input::placeholder{ color:var(--text-dim); }
   .swap-btn{
     display:flex;
     justify-content:center;
@@ -205,7 +242,7 @@
     display:flex; align-items:center; justify-content:center;
     transition: transform 0.2s ease, background 0.2s ease;
   }
-  .swap-btn button:hover{ background:#1c4636; transform: rotate(180deg); }
+  .swap-btn button:hover{ background:var(--hover-bg); transform: rotate(180deg); }
 
   .manual-toggle{
     text-align:center;
@@ -214,7 +251,7 @@
   .manual-toggle button{
     background:none;
     border: none;
-    color: #7a9686;
+    color: var(--text-dim);
     font-size: 12px;
     font-family:'IBM Plex Mono', monospace;
     cursor:pointer;
@@ -231,10 +268,40 @@
     text-align:center;
     margin-top: 30px;
     font-size: 11.5px;
-    color: #5e7c6d;
+    color: var(--text-dim);
     line-height:1.6;
   }
   footer a{ color: var(--gold); }
+
+  /* ---- theme toggle ---- */
+  .theme-toggle-wrap{
+    display:flex;
+    justify-content:center;
+    margin-bottom: 22px;
+  }
+  .theme-toggle{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 14px 6px 6px;
+    cursor:pointer;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    color: var(--text-dim);
+    transition: background 0.3s ease, border-color 0.3s ease;
+  }
+  .theme-toggle .icon{
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--panel-2);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 14px;
+    transition: transform 0.3s ease;
+  }
+  .theme-toggle:hover .icon{ transform: rotate(20deg); }
 
   @media (max-width: 480px){
     .flap-digit{ padding: 5px 2px; }
@@ -245,6 +312,12 @@
 </head>
 <body>
 <div class="wrap">
+  <div class="theme-toggle-wrap">
+    <button class="theme-toggle" id="themeToggle" type="button">
+      <span class="icon" id="themeIcon">🌙</span>
+      <span id="themeLabel">Tungi rejim</span>
+    </button>
+  </div>
   <div class="eyebrow">O'zbekiston Respublikasi Markaziy banki</div>
   <h1>AQSH dollari kursi</h1>
   <div class="subtitle">Rasmiy kurs — real vaqt rejimida CBU.uz orqali</div>
@@ -300,6 +373,24 @@
 <script>
 let currentRate = null;
 let manualMode = false;
+
+const themeToggle = document.getElementById('themeToggle');
+const themeIcon = document.getElementById('themeIcon');
+const themeLabel = document.getElementById('themeLabel');
+
+function applyTheme(isLight){
+  document.body.classList.toggle('light-mode', isLight);
+  themeIcon.textContent = isLight ? '☀️' : '🌙';
+  themeLabel.textContent = isLight ? 'Kunduzgi rejim' : 'Tungi rejim';
+}
+
+// Sayt standart holatda tungi rejimda ochiladi (qora fon, oq yozuv)
+applyTheme(false);
+
+themeToggle.addEventListener('click', () => {
+  const isLight = !document.body.classList.contains('light-mode');
+  applyTheme(isLight);
+});
 
 const flapRow = document.getElementById('flapRow');
 const rateDate = document.getElementById('rateDate');
@@ -396,12 +487,38 @@ manualToggle.addEventListener('click', () => {
   recalc();
 });
 
+const CBU_URL = 'https://cbu.uz/uz/arkhiv-kursov-valyut/json/USD/';
+// To'g'ridan-to'g'ri so'rov brauzerda CORS tomonidan bloklansa,
+// zaxira sifatida ochiq proksi orqali qayta urinib ko'ramiz.
+const CBU_URL_PROXY = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(CBU_URL);
+
+async function fetchJson(url){
+  const res = await fetch(url, { cache: 'no-store' });
+  if(!res.ok) throw new Error('network');
+  return res.json();
+}
+
 async function fetchRate(){
-  statusLine.textContent = 'Kurs yuklanmoqda…';
+  // Agar avval muvaffaqiyatli kurs ko'rsatilgan bo'lsa, xabarni
+  // "yangilanmoqda" deb ko'rsatamiz, lekin joriy raqamni o'chirmaymiz —
+  // shunda kurs ekranda o'zgarib/yo'qolib ketmaydi.
+  if(!currentRate){
+    statusLine.textContent = 'Kurs yuklanmoqda…';
+  }
+
+  let data;
   try{
-    const res = await fetch('https://cbu.uz/uz/arkhiv-kursov-valyut/json/USD/');
-    if(!res.ok) throw new Error('network');
-    const data = await res.json();
+    data = await fetchJson(CBU_URL);
+  }catch(err1){
+    try{
+      data = await fetchJson(CBU_URL_PROXY);
+    }catch(err2){
+      handleFetchFailure();
+      return;
+    }
+  }
+
+  try{
     const item = Array.isArray(data) ? data[0] : data;
     const rate = parseFloat(item.Rate ?? item.rate);
     const diff = item.Diff ?? item.diff;
@@ -415,12 +532,21 @@ async function fetchRate(){
     statusLine.innerHTML = 'Yangilandi: rasmiy manba — <a href="https://cbu.uz" target="_blank" rel="noopener">cbu.uz</a>';
     if(!manualMode) recalc();
   }catch(err){
-    statusLine.textContent = "Kursni avtomatik yuklab bo'lmadi — pastda qo'lda kiriting.";
-    manualMode = true;
-    manualRow.classList.add('show');
-    manualToggle.textContent = "Rasmiy kursga qaytish";
-    flapRow.querySelectorAll('.flap-digit').forEach(d => d.classList.add('dim'));
+    handleFetchFailure();
   }
+}
+
+function handleFetchFailure(){
+  if(currentRate){
+    // Kurs allaqachon ko'rsatilgan — uni o'chirmaymiz, faqat ogohlantiramiz.
+    statusLine.innerHTML = "Yangilanmadi, oxirgi bilingan kurs ko'rsatilmoqda. Manba: <a href=\"https://cbu.uz\" target=\"_blank\" rel=\"noopener\">cbu.uz</a>";
+    return;
+  }
+  statusLine.textContent = "Kursni avtomatik yuklab bo'lmadi — pastda qo'lda kiriting.";
+  manualMode = true;
+  manualRow.classList.add('show');
+  manualToggle.textContent = "Rasmiy kursga qaytish";
+  flapRow.querySelectorAll('.flap-digit').forEach(d => d.classList.add('dim'));
 }
 
 usdInput.value = '1';
