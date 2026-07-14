@@ -316,6 +316,14 @@
   }
   footer a{ color: var(--gold); }
 
+  .credit-line{
+    text-align:center;
+    margin-top: 14px;
+    font-size: 10px;
+    color: var(--text-dim);
+    opacity: 0.6;
+  }
+
   /* ---- theme toggle ---- */
   .theme-toggle-wrap{
     display:flex;
@@ -419,6 +427,7 @@
     Manba: <a href="https://cbu.uz" target="_blank" rel="noopener">cbu.uz</a> — O'zbekiston Respublikasi Markaziy banki rasmiy sayti.<br>
     Ushbu kurslar (USD, RUB) faqat statistik/hisob-kitob maqsadlarida beriladi, bank sotib olish yoki sotish majburiyatini bildirmaydi.
   </footer>
+  <div class="credit-line">Djami 2026</div>
 </div>
 
 <script>
